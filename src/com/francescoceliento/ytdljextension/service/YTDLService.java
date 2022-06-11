@@ -1,5 +1,6 @@
 package com.francescoceliento.ytdljextension.service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +45,7 @@ public class YTDLService {
 		//Filtro i video per la data interessata
 		System.out.println("Filtro gli elementi per le date interessate");
 		List<YTDLItem> itemListToDownload = filterList(itemList);
-		System.out.println("La nuova lista contiene " + itemListToDownload.size() + "elementi");
+		System.out.println("La nuova lista contiene " + itemListToDownload.size() + " elementi");
 		
 		return itemListToDownload;
 	}
@@ -105,14 +106,25 @@ public class YTDLService {
 		if (requestList.size() > 0) {
 			List<YTDLItem> resultSearchList = repo.getInfoVideo(requestList);
 			for (YTDLItem resultSearchItem : resultSearchList) {
-				countItem++;
 				database.insert(resultSearchItem);
 				resultList.add(resultSearchItem);
 			}
 		}
 		System.out.println("Sono state aggiunte " + countItem + " nuove definizioni nel database");
 		
-		//Chiuso il database perché non mi serve più
+		if (resultList.size() != idList.size()) {
+			System.out.println("ATTENZIONE: Il numero di ID scaricati non equivale al numero di ID per la quale abbiamo ricevuto le informazioni. È possibile che tu abbia perso la connessione ad internet durante l'interrogazione. Premerere INVIO per continuare oppure CTRL+C per fermare la procedura e riavviarla.");
+			try {
+				System.in.read();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				System.out.println(e.getMessage());
+				System.exit(0);
+			}
+		}
+		
+		//Chiudo il database perché non mi serve più
 		database.close();
 		
 		return resultList;
