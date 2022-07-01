@@ -1,5 +1,6 @@
 package com.francescoceliento.ytdljextension.service;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -150,16 +151,24 @@ public class YTDLService {
 		for (YTDLItem ytdlItem : items) {
 			count++;
 			System.out.println("Download elemento " + count + " di " + items.size());
-			if (!repo.download(ytdlItem)) {
+			if (checkExistingFile(input.getDownloadDirectory(),ytdlItem.getFileName())) {
+				System.out.println("Il file " + ytdlItem.getFileName() + " esiste già");
+			} else if (!repo.download(ytdlItem)) {
 				System.out.println("Qualcosa è andato storto, inserisco il comando di download nel file di log");
 				logger.log("Errore durante il download di " + ytdlItem.getTitle());
 				logger.log("Esegui il seguente comando da terminale per scaricarlo manualmente");
-				String cmdError = "\"" + input.getYoutubeDLPath() + "\\youtube-dl\" --extract-audio --audio-format mp3 -o \"" + input.getDownloadDirectory() + "\\%(upload_date)s-%(title)s-%(id)s.%(ext)s\" --cookie \"" + input.getYoutubeDLPath() + "\\youtube.com_cookies.txt\" https://www.youtube.com/watch?v=" + ytdlItem;
+				String cmdError = "\"" + input.getYoutubeDLPath() + "\\youtube-dl\" --extract-audio --audio-format mp3 -o \"" + input.getDownloadDirectory() + "\\%(upload_date)s-%(title)s-%(id)s.%(ext)s\" --cookie \"" + input.getYoutubeDLPath() + "\\youtube.com_cookies.txt\" https://www.youtube.com/watch?v=" + ytdlItem.getId();
 				logger.log(cmdError);
 			}
 		}
 		
 		logger.close();
+	}
+	
+	public boolean checkExistingFile (String path, String fileName) {
+		
+		File file = new File (path + "\\" + fileName);
+		return file.exists();
 	}
 
 }

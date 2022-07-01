@@ -26,7 +26,7 @@ public class YTDLRepository {
 		
 		List<String> itemLists = new ArrayList<String>();
 		
-		String cmd = "\"" + input.getYoutubeDLPath() + "\\youtube-dl\" --cookie \"" + input.getYoutubeDLPath() + "\\youtube.com_cookies.txt\" --flat-playlist --get-id " + input.getPlaylistUrl();
+		String cmd = "\"" + input.getYoutubeDLPath() + "\\youtube-dl\" --cookie \"" + input.getYoutubeDLPath() + "\\youtube.com_cookies.txt\" --playlist-reverse --flat-playlist --get-id " + input.getPlaylistUrl();
 		
 		Process process;
 		try {
@@ -99,7 +99,7 @@ public class YTDLRepository {
 	
 		boolean result;
 			
-		String cmd = "\"" + input.getYoutubeDLPath() + "\\youtube-dl\" --dateafter " + input.getDateBeginToString() + " --datebefore " + input.getDateEndToString() + " --extract-audio --audio-format mp3 -o \"" + input.getDownloadDirectory() + "\\%(upload_date)s-%(title)s-%(id)s.%(ext)s\" --cookie \"" + input.getYoutubeDLPath() + "\\youtube.com_cookies.txt\" https://www.youtube.com/watch?v=" + item.getId();
+		String cmd = "\"" + input.getYoutubeDLPath() + "\\youtube-dl\" --extract-audio --audio-format mp3 -o \"" + input.getDownloadDirectory() + "\\%(upload_date)s-%(title)s-%(id)s.%(ext)s\" --cookie \"" + input.getYoutubeDLPath() + "\\youtube.com_cookies.txt\" https://www.youtube.com/watch?v=" + item.getId();
 		
 		int downloadCheck = 0;
 		int attemps = 0;

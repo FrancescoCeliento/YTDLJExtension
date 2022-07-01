@@ -53,4 +53,8 @@ public class YTDLItem {
 		this.title = title;
 	}
 	
+	public String getFileName() {
+		return getUploadDateToString() + "-" + title + "-" + id + ".mp3";
+	}
+	
 }

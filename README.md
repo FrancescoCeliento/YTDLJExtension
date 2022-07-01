@@ -1,5 +1,5 @@
 # YTDLJExtension
-Version 0.1.1-beta
+Version 0.1.2-beta
   
 Libreria che estende la gestione del download in mp3 di intere playlist utilizzando youtube-dl
 
