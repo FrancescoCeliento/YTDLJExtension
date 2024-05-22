@@ -50,7 +50,7 @@ Già dal primo utilizzo, nella cartella dove si trovano le librerie necessarie (
   - Abilitare download video
   - Abilitare download sottotitoli generati automaticamente
   - Download playlist smart temporizzata: Inserita la playlist o il canale, ed inserito un minutaggio, il tool deve scaricare in una cartella una playlist smart casuale della durata esatta del minutaggio scelto
-  - Gestire gli  ID3 tag
+  - Gestire gli  ID3 tag in caso di download degli mp3
 
 ## Ti gusta il progetto?
 Mi fa piacere, e se ti va mi puoi offrire tipo [un caffè](https://ko-fi.com/francescoceliento)
