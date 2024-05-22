@@ -45,6 +45,12 @@ Già dal primo utilizzo, nella cartella dove si trovano le librerie necessarie (
   - Configurare dei lanciatori .bat e .sh per avviare lo script senza dover utilizzare ogni volta il comando **java -jar YTDLJExtension-version.jar**
   - Gestire selezione download audio (mp3) o video (mp4)
   - Aggiungere calcolo percentuale sulla lista dei download
+  - Incorporare tutte le librerie necessarie nello stesso jar
+  - Gestire la posizione del database nella stessa posizione del jar
+  - Abilitare download video
+  - Abilitare download sottotitoli generati automaticamente
+  - Download playlist smart temporizzata: Inserita la playlist o il canale, ed inserito un minutaggio, il tool deve scaricare in una cartella una playlist smart casuale della durata esatta del minutaggio scelto
+  - Gestire gli  ID3 tag
 
 ## Ti gusta il progetto?
 Mi fa piacere, e se ti va mi puoi offrire tipo [un caffè](https://ko-fi.com/francescoceliento)
