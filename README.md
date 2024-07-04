@@ -41,6 +41,8 @@ Dal primo utilizzo verà creato il database **YTDLJExtension.db** che non dovrà
 La libreria si occupa anche di splittare i lunghi mix. Se, invece di inserire il link di un canale o di una playlist, viene inserito il link di un singolo video, lo script ci chiederà gli eventuali tempi per splittare un lungo remix. Gli offset vanno inseriti in questo formato
 
     00:00:00;00:02:30;00:05:47;ecc...
+    
+Digitare INVIO senza input per saltare lo split
 
 ## Da fare
   - Migliorare il README.MD
