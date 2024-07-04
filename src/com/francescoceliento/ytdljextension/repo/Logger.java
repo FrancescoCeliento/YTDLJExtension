@@ -1,6 +1,7 @@
 package com.francescoceliento.ytdljextension.repo;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -18,9 +19,16 @@ public class Logger {
 		this.path = path;
 		this.fileName = fileName;
 		
+		File folder;
+		
 		try {
 
-			fw = new FileWriter(path + "\\" + fileName, true);
+			//Se non esiste la cartella download la creo prima di creare il file di log
+			folder = new File(path);
+			if (!folder.exists())
+				folder.mkdirs();
+			
+			fw = new FileWriter(path + "/" + fileName, true);
 			bw = new BufferedWriter(fw);
 			pw = new PrintWriter(bw);
 			

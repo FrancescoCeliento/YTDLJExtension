@@ -12,6 +12,7 @@ public class YTDLInput {
 	private String youtubeDLPath;
 	private Date dateBegin;
 	private Date dateEnd;
+	private String splitTime;
 	
 	private boolean dateFilter;
 	
@@ -98,6 +99,15 @@ public class YTDLInput {
 	
 	public boolean isFiltered() {
 		return dateFilter;
+	}
+	public String getSplitTime() {
+		return splitTime;
+	}
+	public void setSplitTime(String splitTime) {
+		this.splitTime = splitTime;
+	}
+	public boolean isSplitting() {
+		return this.splitTime != null; 
 	}
 
 }

@@ -2,3 +2,5 @@
 .settings/*
 bin
 bin/*/*
+metadata
+.metadata/*
