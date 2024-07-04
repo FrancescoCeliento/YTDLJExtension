@@ -7,5 +7,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/sqlite-jdbc-3.36.0.3.jar"/>
+	<classpathentry kind="lib" path="lib/mp3agic-0.9.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

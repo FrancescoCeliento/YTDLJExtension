@@ -32,11 +32,11 @@ public class SQLLiteDB {
 	}
 		
 	private String getDBUrl() {
-		return "jdbc:sqlite:"+path+"\\"+name;
+		return "jdbc:sqlite:"+path+"/"+name;
 	}
 	
 	private String getDBPosition() {
-		return path+"//"+name;
+		return path+"/"+name;
 	}
 	
 	public void checkDatabase() {
@@ -58,7 +58,7 @@ public class SQLLiteDB {
 	            System.out.println(e.getMessage());  
 	        }  
 		} else {
-			System.out.println("Abbiamo trovato un file database già esistente");
+			System.out.println("Abbiamo trovato un file database giï¿½ esistente");
 		}
 		
 		try {

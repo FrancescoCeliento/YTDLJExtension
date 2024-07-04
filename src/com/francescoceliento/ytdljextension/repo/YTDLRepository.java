@@ -26,24 +26,36 @@ public class YTDLRepository {
 		
 		List<String> itemLists = new ArrayList<String>();
 		
-		String cmd = "\"" + input.getYoutubeDLPath() + "\\youtube-dl\" --cookie \"" + input.getYoutubeDLPath() + "\\youtube.com_cookies.txt\" --playlist-reverse --flat-playlist --get-id " + input.getPlaylistUrl();
+		// Test utilizzo yt-dlp invece di youtube-dl
+		//String cmd = "\"" + input.getYoutubeDLPath() + "\\youtube-dl\" --cookies \"" + input.getYoutubeDLPath() + "\\youtube.com_cookies.txt\" --playlist-reverse --flat-playlist --get-id " + input.getPlaylistUrl();
+		String cmd = input.getYoutubeDLPath() + "/yt-dlp --compat-options no-youtube-unavailable-videos --cookies \"" + input.getYoutubeDLPath() + "/youtube.com_cookies.txt\" --playlist-reverse --flat-playlist --get-id " + input.getPlaylistUrl();
+		String[] command = new String[] {
+				input.getYoutubeDLPath() + "/yt-dlp",
+                "--compat-options", "no-youtube-unavailable-videos",
+                "--cookies", input.getYoutubeDLPath() + "/youtube.com_cookies.txt",
+                "--playlist-reverse", "--flat-playlist",  
+                "--get-id", input.getPlaylistUrl()
+            };	
 		
 		Process process;
 		try {
 			process = Runtime.getRuntime()
 					//.exec(cmd, null, new File("C:\\Users\\Francesco Celiento\\youtube-dl\\"));
-					.exec(cmd, null, null);
+					//.exec(cmd, null, null);
+					.exec(command);
 			
 			BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 			String line = "";
 			while ((line = reader.readLine()) != null) {
+//				if (line.startsWith("\"") && line.endsWith("\"")) {
+//					line = line.substring(1, line.length() - 1);
+//		        }
 				itemLists.add(line);
 			}
+			reader.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		      //.exec("sh -c ls", null, new File("Pathname")); for non-Windows users
 		
 		return itemLists;
 	}
@@ -58,23 +70,40 @@ public class YTDLRepository {
 		YTDLItem resultItem;
 		
 		//Preparo il command
-		String cmd = "\"" + input.getYoutubeDLPath() + "\\youtube-dl\" --cookie \"" + input.getYoutubeDLPath() + "\\youtube.com_cookies.txt\" --flat-playlist --get-filename -o \"%(id)s;%(upload_date)s;%(title)s\"";
+		String cmd = input.getYoutubeDLPath() + "/yt-dlp --flat-playlist --cookies \"" + input.getYoutubeDLPath() + "/youtube.com_cookies.txt\" --get-filename -o \"%(id)s;%(upload_date)s;%(title)s\"";
+		String[] command = new String[] {
+				input.getYoutubeDLPath() + "/yt-dlp",
+                "--flat-playlist",
+                "--cookies", input.getYoutubeDLPath() + "/youtube.com_cookies.txt",
+                "--get-filename", "-o", "%(id)s;%(upload_date)s;%(title)s"
+            };		
 		
 		for (String requestItem : requestList) {
 			cmd += " https://www.youtube.com/watch?v=" + requestItem;
+			
+			String[] nuovoCommand = new String[command.length + 1];
+			for (int i = 0; i < command.length; i++) {
+				nuovoCommand[i] = command[i];
+			}
+			nuovoCommand[command.length] = "https://www.youtube.com/watch?v=" + requestItem;
+			command = nuovoCommand; 
 		}
 		
 		//Eseguo il processo di recupero date
 		Process process;
 		try {
 			process = Runtime.getRuntime()
-					//.exec(cmd, null, new File("C:\\Users\\Francesco Celiento\\youtube-dl\\"));
-					.exec(cmd, null, null);
+					//.exec(cmd, null, null);
+					.exec(command);
+			
 			
 			BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 			String line = "";
 			String[] split;
 			while ((line = reader.readLine()) != null) {
+//				if (line.startsWith("\"") && line.endsWith("\"")) {
+//					line = line.substring(1, line.length() - 1);
+//		        }
 				split = line.split(";");
 				resultItem = new YTDLItem();
 				resultItem.setId(split[0]);
@@ -83,11 +112,11 @@ public class YTDLRepository {
 				
 				resultList.add(resultItem);
 			}
+			reader.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		      //.exec("sh -c ls", null, new File("Pathname")); for non-Windows users
+		
 		return resultList;
 	}
 	
@@ -95,11 +124,21 @@ public class YTDLRepository {
 	/*
 	 * 
 	 */
-	public boolean download(YTDLItem item) {
+	public boolean download(YTDLItem item, boolean ifsplitting) {
 	
 		boolean result;
-			
-		String cmd = "\"" + input.getYoutubeDLPath() + "\\youtube-dl\" --extract-audio --audio-format mp3 -o \"" + input.getDownloadDirectory() + "\\%(upload_date)s-%(title)s-%(id)s.%(ext)s\" --cookie \"" + input.getYoutubeDLPath() + "\\youtube.com_cookies.txt\" https://www.youtube.com/watch?v=" + item.getId();
+		String patternFile = ifsplitting ? item.getId() + ".%(ext)s" : "%(upload_date)s-%(title)s-%(id)s.%(ext)s";
+		
+		// Test utilizzo yt-dlp invece di youtube-dl
+		String[] command = new String[] {
+				input.getYoutubeDLPath() + "/yt-dlp",
+                "--extract-audio",
+                "--cookies", input.getYoutubeDLPath() + "/youtube.com_cookies.txt",
+                "--ffmpeg-location", input.getYoutubeDLPath(),
+                "--audio-format", "mp3",
+                "-o", input.getDownloadDirectory() + "/" + patternFile,
+                "https://www.youtube.com/watch?v=" + item.getId()
+            };
 		
 		int downloadCheck = 0;
 		int attemps = 0;
@@ -116,24 +155,23 @@ public class YTDLRepository {
 			Process process;
 			try {
 				process = Runtime.getRuntime()
-						//.exec(cmd, null, new File("C:\\Users\\Francesco Celiento\\youtube-dl\\"));
-						.exec(cmd, null, null);
+						.exec(command);
 				BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-				String line = "";
+				String line;
 				String lastLine = "";
+				
 				while ((line = reader.readLine()) != null) {
 					if (line.startsWith("[download]")) {
 						downloadCheck++;
 						lastLine = line;
-						
 					}
 				}
+				reader.close();
 				
-				if (!lastLine.isBlank())
+				if (lastLine!="")
 					System.out.println(lastLine);
 				
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		
@@ -146,8 +184,6 @@ public class YTDLRepository {
 			result = true;
 		}
 		
-		
-		      //.exec("sh -c ls", null, new File("Pathname")); for non-Windows users
 		return result;
 	}
 
